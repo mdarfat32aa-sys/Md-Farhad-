@@ -1,25 +1,22 @@
 module.exports.config = {
- name: "antijoin",
- eventType: ["log:subscribe"],
- version: "1.0.0",
- credits: "𝗜𝘀𝗹𝗮𝗺𝗶𝗰𝗸 𝗰𝗵𝗮𝘁 𝗯𝗼𝘁",
- description: "Welcome new members to the group"
+ name: "antiout",
+ eventType: ["log:unsubscribe"],
+ version: "0.0.1",
+ credits: "𝐂𝐘𝐁𝐄𝐑 ☢️_𖣘 -𝐁𝐎𝐓 ⚠️ 𝑻𝑬𝑨𝑴_ ☢️",
+ description: "Listen events"
 };
 
-module.exports.run = async function ({ event, api, Threads, Users }) {
- 	let data = (await Threads.getData(event.threadID)).data
- 	if (data.newMember == false) return;
- 	if (event.logMessageData.addedParticipants.some(i => i.userFbId == api.getCurrentUserID())) return
-    else if(data.newMember == true) {
-    var memJoin = event.logMessageData.addedParticipants.map(info => info.userFbId)
-			for (let idUser of memJoin) {
-					await new Promise(resolve => setTimeout(resolve, 1000));
-					api.removeUserFromGroup(idUser, event.threadID, async function (err) {
-                        if (err) return data["newMember"] = false;
-                            await Threads.setData(event.threadID, { data });
-                              global.data.threadData.set(event.threadID, data);
-                    })
-			}
- 	return api.sendMessage(`» Your team now has Anti Join mode turned on, please turn it off before adding a new 👻 member`, event.threadID);
+module.exports.run = async({ event, api, Threads, Users }) => {
+ let data = (await Threads.getData(event.threadID)).data || {};
+ if (data.antiout == false) return;
+ if (event.logMessageData.leftParticipantFbId == api.getCurrentUserID()) return;
+ const name = global.data.userName.get(event.logMessageData.leftParticipantFbId) || await Users.getNameUser(event.logMessageData.leftParticipantFbId);
+ const type = (event.author == event.logMessageData.leftParticipantFbId) ? "self-separation" : "Koi Ase Pichware Mai Lath Marta Hai?";
+ if (type == "self-separation") {
+  api.addUserToGroup(event.logMessageData.leftParticipantFbId, event.threadID, (error, info) => {
+   if (error) {
+    api.sendMessage(`সরি বস আবালরে এড করতে পারলাম না \n ${name} এই আবালের আইডিতে মেসেঞ্জার অপশন তাই এড করতে পারলাম না😞 \n\n ──────·····✦·····──── \n —͟͟͞͞𝐕𝐨𝐢𝐜𝐞 𝐒𝐭𝐚𝐭𝐢𝐨𝐧 𝐁𝐨𝐭 `, event.threadID)
+   } else api.sendMessage(`শোন, ${name} এই গ্রুপ হইলো গ্যাং! \n এখান থেকে যাইতে হইলে এডমিনের ক্লিয়ারেন্স লাগে! \nতুই পারমিশন ছাড়া লিভ নিছোস – তোকে আবার মাফিয়া স্টাইলে এড দিলাম। \n\n ── ·······✦·······──── \n —͟͟͞͞𝐕𝐨𝐢𝐜𝐞 𝐒𝐭𝐚𝐭𝐢𝐨𝐧 𝐁𝐨𝐭 `, event.threadID);
+  })
  }
 }
