@@ -178,9 +178,9 @@ Please do not disturb the admin unless you have a special need. Thank you!
 ## ✨🌟 Special Thanks 🌟✨
 
 - 🚀 **𝐅𝐚𝐫𝐡𝐚𝐝(Bot owner)**  
-- 🧙‍♂️ **Mahide(Bot admin)**
+- 🧙‍♂️ **Sahu(Bot admin)**
 - 🛡️ **RANA ( Bot Admin )**
-- 🎓 **Farhat (Bot Admin )** 
+- 🎓 **Mahide (Bot Admin )** 
 
 ---
 
